@@ -1,0 +1,33 @@
+---
+title: "LogisitcRegression"
+author: "SP"
+date: "July 4, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Logistic Regression Exercise:
+
+1. Use glm to conduct a logistic regression to predict ever worked (everwrk) using age (age_p) and marital status (r_maritl).
+2. Predict the probability of working for each level of marital status.
+
+```{r}
+# loading the data set
+NH11 <- readRDS("dataSets/NatHealth2011.rds")
+labs <- attributes(NH11)$labels
+# check stucture of hypev
+str(NH11$hypev) 
+# Issolating subbset of variables
+nh11.wrk.age.mar <- subset(NH11, select = c("everwrk", "age_p", "r_maritl"))
+# Understanding the data
+summary(nh11.wrk.age.mar)
+# Runing the transformations on variables
+NH11 <- transform(NH11, everwrk = factor(everwrk, levels = c("1 Yes", "2 No")),r_maritl = droplevels(r_maritl))
+# Performing  Binominal ( logistic regression)
+mod.wk.age.mar <- glm(everwrk ~ age_p + r_maritl, data = NH11,family = "binomial")
+# Final Summary
+summary(mod.wk.age.mar)
+```
